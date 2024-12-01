@@ -11,6 +11,28 @@ get_valid_year() {
     done
 }
 
+fetch_aoc_inputs() {
+    local year=$1
+    local current_year=$(date +%Y)
+    echo "Fetching Advent of Code inputs..."
+    if [ "$year" -ne "$current_year" ]; then
+        echo "Fetching inputs for all days in $year..."
+        for day in {1..25}; do
+            cargo aoc input -d $day -y $year || exit 1
+            echo "Day $day inputs fetched successfully!"
+        done
+    else
+      
+        local current_day=$(date +%d)
+        local max_day=$((current_day < 25 ? current_day : 25))
+        echo "Fetching inputs for all days until $max_day in $year..."
+        for day in $(seq 1 $max_day); do
+            cargo aoc input -d $day -y $year || exit 1
+        done
+    fi
+    echo "Advent of Code inputs have been fetched successfully!"
+}
+
 year=$(get_valid_year)
 workspace="aoc$year"
 
@@ -23,7 +45,7 @@ if [ ! -d "$workspace" ]; then
     cargo install cargo-aoc || exit 1
     cargo add aoc-runner aoc-runner-derive || exit 1
     clear
-
+    echo "Creating folders and files..."
     for i in {1..25}; do
         touch src/day$i.rs
         echo "pub mod day$i;" >> src/lib.rs
@@ -36,8 +58,9 @@ if [ ! -d "$workspace" ]; then
     read -sp "Cookie: " cookie
     echo
     cargo aoc credentials "$cookie" || exit 1
-    cargo aoc input || exit 1
-
+    
+    fetch_aoc_inputs $year
+    echo "Advent of Code $year has been initialized successfully!"
     echo "Happy coding!"
 else
     echo "Folder already exists! Happy coding!"
