@@ -1,0 +1,44 @@
+# Cargo's default target directory
+/target/
+
+# Build output directories for different environments
+/target/
+
+# Ignore rustup's settings
+/rust-toolchain.toml
+
+# Ignore IDE/editor files
+.vscode/
+.idea/
+
+# Dependency directory (if you are using cargo vendor)
+vendor/
+
+# Ignore the lock file for a package that shouldn't be committed (e.g. if you use `cargo vendor`)
+/Cargo.lock
+
+# Ignore temporary files from running tests (if applicable)
+*.log
+
+# Ignore compiled dynamic libraries
+*.dylib
+*.so
+*.dll
+
+# Ignore OS-specific files (macOS, Linux, Windows)
+.DS_Store
+Thumbs.db
+
+# Ignore backup files
+*~
+
+# Ignore the `target/debug` and `target/release` binaries if they are accidentally committed
+/debug/
+/release/
+
+# Ignore the rust build caches
+/.cargo/
+
+# Ignore all build output if not using `cargo` to build
+*.o
+*.a
