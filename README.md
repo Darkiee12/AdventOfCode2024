@@ -17,5 +17,5 @@ Once you have these tools installed, open the repository in VS Code, and it will
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE.txt) file for details.
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
 
