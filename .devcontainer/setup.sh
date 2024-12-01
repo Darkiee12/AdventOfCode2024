@@ -24,21 +24,17 @@ if [ ! -d "$workspace" ]; then
     cargo add aoc-runner aoc-runner-derive || exit 1
     clear
 
-    echo "Please enter your Advent of Code session cookie:"
-    read -sp "Cookie: " cookie
-    echo
-    clear
-
     for i in {1..25}; do
         touch src/day$i.rs
+        echo "pub mod day$i;" >> src/lib.rs
     done
 
     echo "aoc_runner_derive::aoc_main! { lib = $workspace }" > src/main.rs
-    for i in {1..25}; do
-        echo "pub mod day$i;" >> src/lib.rs
-    done
     echo "aoc_runner_derive::aoc_lib! { year = $year }" >> src/lib.rs
-    
+
+    echo "Please enter your Advent of Code session cookie:"
+    read -sp "Cookie: " cookie
+    echo
     cargo aoc credentials "$cookie" || exit 1
     cargo aoc input || exit 1
 
