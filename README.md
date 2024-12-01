@@ -14,3 +14,8 @@ To replicate my setup, clone the `.devcontainer` folder and follow the instructi
 - [VS Code Remote - Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 
 Once you have these tools installed, open the repository in VS Code, and it will automatically prompt you to reopen in the container. From there, you can start working on the daily challenges.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE.txt) file for details.
+
