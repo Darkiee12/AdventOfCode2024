@@ -1,15 +1,14 @@
 use aoc_runner_derive::{aoc, aoc_generator};
 
 #[aoc_generator(day1)]
-fn preprocess(input: &str) -> (Vec<i32>,Vec<i32>) {
+fn preprocess(input: &str) -> (Vec<i32>, Vec<i32>) {
     let (mut v1, mut v2): (Vec<i32>, Vec<i32>) = (vec![], vec![]);
-    for line in input.lines(){
+    for line in input.lines() {
         let parts: Vec<&str> = line.split_whitespace().collect();
         v1.push(parts[0].parse().unwrap());
         v2.push(parts[1].parse().unwrap());
     }
     (v1, v2)
-    
 }
 
 /*
@@ -40,13 +39,13 @@ To find the total distance between the left list and the right list, add up the 
 Your actual left and right lists contain many location IDs. What is the total distance between your lists?
 */
 #[aoc(day1, part1)]
-fn part1(input: &(Vec<i32>, Vec<i32>)) -> u32{
+fn part1(input: &(Vec<i32>, Vec<i32>)) -> u32 {
     let (mut left, mut right) = input.clone();
     left.sort_unstable();
     right.sort_unstable();
     left.into_iter()
         .zip(right.into_iter())
-        .map(|(l,r)| l.abs_diff(r))
+        .map(|(l, r)| l.abs_diff(r))
         .sum::<u32>()
 }
 
@@ -74,14 +73,15 @@ So, for these example lists, the similarity score at the end of this process is 
 Once again consider your left and right lists. What is their similarity score?
 */
 #[aoc(day1, part2)]
-fn part2(input: &(Vec<i32>, Vec<i32>)) -> u64{
+fn part2(input: &(Vec<i32>, Vec<i32>)) -> u64 {
     let (left, right) = input.clone();
-    let freq = right.iter().fold(std::collections::HashMap::new(), |mut acc, &x| {
-        *acc.entry(x).or_insert(0) += 1;
-        acc
-    });
-    left
-        .into_iter()
-        .map(|x| (x*freq.get(&x).unwrap_or(&0)) as u64)
+    let freq = right
+        .iter()
+        .fold(std::collections::HashMap::new(), |mut acc, &x| {
+            *acc.entry(x).or_insert(0) += 1;
+            acc
+        });
+    left.into_iter()
+        .map(|x| (x * freq.get(&x).unwrap_or(&0)) as u64)
         .sum::<u64>()
 }
