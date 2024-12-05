@@ -26,62 +26,61 @@ impl Mul {
 
 struct State(i32);
 
-impl State{
-    fn new() -> Self{
+impl State {
+    fn new() -> Self {
         State(0)
     }
-    fn next(&mut self){
-        self.0+=1;
+    fn next(&mut self) {
+        self.0 += 1;
     }
 
-    fn clear(&mut self){
+    fn clear(&mut self) {
         self.0 = 0;
     }
 
-    fn get(&self) -> i32{
+    fn get(&self) -> i32 {
         self.0
     }
 
-    fn set(&mut self, state: i32){
+    fn set(&mut self, state: i32) {
         self.0 = state;
     }
 }
 
-struct Command{
+struct Command {
     state: State,
-    enable: bool
+    enable: bool,
 }
 
-impl Command{
-    fn new(enable: bool) -> Self{
-        Command{
+impl Command {
+    fn new(enable: bool) -> Self {
+        Command {
             state: State(0),
-            enable
+            enable,
         }
     }
 
-    fn process(&mut self, c: char){
-        match (self.state.get(), c){
+    fn process(&mut self, c: char) {
+        match (self.state.get(), c) {
             (0, 'd') | (1, 'o') | (2, '(') | (4, '\'') | (5, 't') | (6, '(') => self.state.next(),
             (3, ')') => {
                 self.state.clear();
                 self.enable = true;
-            }, 
+            }
             (7, ')') => {
                 self.state.clear();
                 self.enable = false;
-            },
+            }
             (2, 'n') => self.state.set(4),
             _ => self.state.clear(),
         }
     }
 }
 
-
 struct Automata {
     state: State,
     buffer: String,
-    command: Option<Command>
+    command: Option<Command>,
 }
 
 impl Automata {
@@ -89,7 +88,7 @@ impl Automata {
         Self {
             state: State::new(),
             buffer: String::new(),
-            command: enable.into().and_then(|e| Some(Command::new(e))),
+            command: enable.into().map(Command::new),
         }
     }
 
@@ -99,18 +98,17 @@ impl Automata {
         }
         match (self.state.get(), c) {
             (0, 'm') | (1, 'u') | (2, 'l') | (3, '(') | (5, ',') => self.next(c),
-            (4, c) | (6, c) if c.is_digit(10) => self.next(c),
-            (5, c) | (7, c) if c.is_digit(10) => self.stay(c),
+            (4, c) | (6, c) if c.is_ascii_digit() => self.next(c),
+            (5, c) | (7, c) if c.is_ascii_digit() => self.stay(c),
             (7, ')') => {
                 self.next(c);
                 let buffer = self.buffer.clone();
                 self.clear();
-                match &self.command{
+                match &self.command {
                     Some(c) if c.enable => return Some(buffer),
                     None => return Some(buffer),
                     _ => return None,
                 }
-
             }
             _ => self.clear(),
         };
@@ -142,7 +140,6 @@ impl Automata {
     fn stay(&mut self, c: char) {
         self.buffer.push(c);
     }
-
 }
 
 #[aoc_generator(day3)]
@@ -151,14 +148,14 @@ fn preprocess(input: &str) -> String {
 }
 
 #[aoc(day3, part1)]
-fn part1(gibberish: &String) -> i32 {
+fn part1(gibberish: &str) -> i32 {
     let mut automata = Automata::new(None);
     let muls = automata.read(gibberish);
     muls.iter().map(|mul| mul.eval()).sum()
 }
 
 #[aoc(day3, part2)]
-fn part2(gibberish: &String) -> i32 {
+fn part2(gibberish: &str) -> i32 {
     let mut automata = Automata::new(true);
     let muls = automata.read(gibberish);
     muls.iter().map(|mul| mul.eval()).sum()

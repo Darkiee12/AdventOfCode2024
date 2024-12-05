@@ -1,3 +1,4 @@
+#![feature(iter_next_chunk)]
 pub mod day1;
 pub mod day10;
 pub mod day11;

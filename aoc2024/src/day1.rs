@@ -44,7 +44,7 @@ fn part1(input: &(Vec<i32>, Vec<i32>)) -> u32 {
     left.sort_unstable();
     right.sort_unstable();
     left.into_iter()
-        .zip(right.into_iter())
+        .zip(right)
         .map(|(l, r)| l.abs_diff(r))
         .sum::<u32>()
 }
